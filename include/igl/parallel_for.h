@@ -40,7 +40,8 @@ namespace igl
   inline bool parallel_for(
     const Index loop_size, 
     const FunctionType & func,
-    const size_t min_parallel=0);
+    const size_t min_parallel=0,
+    const size_t num_threads=0);
   // PARALLEL_FOR Functional implementation of an open-mp style, parallel for
   // loop with accumulation. For example, serial code separated into n chunks
   // (each to be parallelized with a thread) might look like:
@@ -84,7 +85,8 @@ namespace igl
     const PrepFunctionType & prep_func,
     const FunctionType & func,
     const AccumFunctionType & accum_func,
-    const size_t min_parallel=0);
+    const size_t min_parallel=0,
+    const size_t num_threads=0);
 }
 
 // Implementation
@@ -99,14 +101,15 @@ template<typename Index, typename FunctionType >
 inline bool igl::parallel_for(
   const Index loop_size, 
   const FunctionType & func,
-  const size_t min_parallel)
+  const size_t min_parallel,
+  const size_t num_threads)
 {
   using namespace std;
   // no op preparation/accumulation
   const auto & no_op = [](const size_t /*n/t*/){};
   // two-parameter wrapper ignoring thread id
   const auto & wrapper = [&func](Index i,size_t /*t*/){ func(i); };
-  return parallel_for(loop_size,no_op,wrapper,no_op,min_parallel);
+  return parallel_for(loop_size,no_op,wrapper,no_op,min_parallel,num_threads);
 }
 
 template<
@@ -119,13 +122,14 @@ inline bool igl::parallel_for(
   const PreFunctionType & prep_func,
   const FunctionType & func,
   const AccumFunctionType & accum_func,
-  const size_t min_parallel)
+  const size_t min_parallel,
+  const size_t num_threads)
 {
   assert(loop_size>=0);
   if(loop_size==0) return false;
   // Estimate number of threads in the pool
   // http://ideone.com/Z7zldb
-  const static size_t sthc = std::thread::hardware_concurrency();
+  const size_t sthc = num_threads == 0 ? std::thread::hardware_concurrency() : num_threads;
   const size_t nthreads = 
 #ifdef IGL_PARALLEL_FOR_FORCE_SERIAL
     0;

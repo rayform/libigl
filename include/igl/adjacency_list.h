@@ -31,7 +31,7 @@ namespace igl
   // See also: edges, cotmatrix, diag
   template <typename Index, typename IndexVector>
   IGL_INLINE void adjacency_list(
-    const Eigen::PlainObjectBase<Index> & F, 
+    const Eigen::MatrixBase<Index>& F,
     std::vector<std::vector<IndexVector> >& A,
     bool sorted = false);
 
@@ -39,7 +39,7 @@ namespace igl
   // Each element of F is a set of indices of a polygonal face.
   template <typename Index>
   IGL_INLINE void adjacency_list(
-    const std::vector<std::vector<Index> > & F,
+    const std::vector<std::vector<Index> >& F,
     std::vector<std::vector<Index> >& A);
 
 }

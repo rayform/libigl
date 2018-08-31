@@ -12,7 +12,7 @@
 
 template <typename Index, typename IndexVector>
 IGL_INLINE void igl::adjacency_list(
-    const Eigen::PlainObjectBase<Index>  & F,
+    const Eigen::MatrixBase<Index>& F,
     std::vector<std::vector<IndexVector> >& A,
     bool sorted)
 {

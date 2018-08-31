@@ -43,11 +43,11 @@ namespace igl
   // therefore in general negative and the matrix is **negative** semi-definite
   // (immediately, -L is **positive** semi-definite)
   //
-  template <typename DerivedV, typename DerivedF, typename Scalar>
+  template <typename DerivedV, typename DerivedF, typename SparseDerivedL>
   IGL_INLINE void cotmatrix(
     const Eigen::MatrixBase<DerivedV> & V, 
     const Eigen::MatrixBase<DerivedF> & F, 
-    Eigen::SparseMatrix<Scalar>& L);
+    Eigen::SparseMatrixBase<SparseDerivedL>& L);
 }
 
 #ifndef IGL_STATIC_LIBRARY
